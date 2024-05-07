@@ -2,8 +2,14 @@ import random
 from dataclasses import dataclass
 from faker import Faker
 
+@dataclass
+class Urls:
+    main_page = 'https://stellarburgers.nomoreparties.site/'
+    authorization_page = main_page + 'login'
+    registry_page = main_page + 'register'
+    forgot_passwod_page = main_page + 'forgot-password'
+    feed_page = main_page + 'feed'
 
-WEBSITE = 'https://stellarburgers.nomoreparties.site/'
 
 @dataclass
 class Selectors:
@@ -13,9 +19,7 @@ class Selectors:
     password_button = './/label[text() = "Пароль"]/../input'
     name_button = './/label[text() = "Имя"]/../input'
     registry_button = '/html/body/div/div/main/div/form/button'
-    enter_button = '/html/body/div/div/main/div/form/button'
-    auth_email = '/html/body/div/div/main/div/form/fieldset[1]/div/div/label'
-    auth_password = '/html/body/div/div/main/div/form/fieldset[2]/div/div'
+    enter_button = '//main//button'
 
 @dataclass
 class Credetionals:

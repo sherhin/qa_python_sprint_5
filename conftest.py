@@ -1,6 +1,7 @@
 import time
 
 import pytest
+from selenium.common import TimeoutException
 from selenium.webdriver import Keys
 from selenium.webdriver.common.by import By
 from selenium import webdriver
@@ -9,10 +10,15 @@ import logging
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions
 
+from data import Urls as url
+
+
+from selenium.webdriver.support.wait import WebDriverWait
+from selenium.webdriver.support import expected_conditions
+
 from data import Selectors as selector
 from data import Credetionals as cred
 
-from data import Selectors
 
 
 def pytest_addoption(parser):
@@ -67,25 +73,26 @@ class BrowserHelpers():
     def click_button(self, button):
         button.click()
 
-    def get_personal_account_page(self, driver_client, website):
-        self.get_page(website)
+    def get_personal_account_page(self, driver_client):
+        self.get_page(url.main_page)
         lk_button = selector.lk_button
         driver_client.find_element(By.XPATH, lk_button).click()
         current_url = self.get_current_page()
-        return 'login' in current_url
+        return current_url
 
-    def get_registration_page(self, driver_client, website):
-        self.get_personal_account_page(driver_client, website)
+    def get_registration_page(self, driver_client):
+        driver_client.get(url.authorization_page)
         registration_button = selector.registration_button
         driver_client.find_element(By.XPATH, registration_button).click()
         current_url = self.get_current_page()
-        return 'register' in current_url
+        return current_url
 
     def registration(
-            self, driver_client, website, reg_login,
+            self, driver_client, reg_login,
             reg_email, reg_password
     ):
-        self.get_registration_page(driver_client, website)
+        driver_client.get(url.registry_page)
+
         email = selector.email_button
         password = selector.password_button
         login = selector.name_button
@@ -97,8 +104,13 @@ class BrowserHelpers():
         login_field.send_keys(reg_login)
         password_field.send_keys(reg_password)
         driver_client.find_element(By.XPATH, registry_button).click()
-        current_url = self.get_current_page()
-        return 'login' in current_url, reg_email, reg_password
+        wait = WebDriverWait(driver_client, 10)
+        try:
+            reg_status = wait.until(expected_conditions.url_to_be(url.authorization_page))
+        except TimeoutException:
+            reg_status = False
+        return reg_status, reg_email, reg_password
+
 
     # def clear_input_field(self, locator_path: str) -> None:
     #     """ Очищает input поле ввода
