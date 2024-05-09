@@ -45,13 +45,16 @@ def driver_client(request):
 def delete_all_cookies(driver_client):
     driver_client.delete_all_cookies()
 
-@pytest.fixture()
+pytest.fixture(scope='class')
+
+
+
+@pytest.fixture
 def browser_helper(driver_client):
     """Создание экземпляра класса хэлпера
     """
     browser_helper = BrowserHelpers(driver_client)
     return browser_helper
-
 
 class BrowserHelpers():
     """ Класс с общими методами для взаимодействия с сайтом.
@@ -59,6 +62,7 @@ class BrowserHelpers():
 
     def __init__(self, driver_client):
         self.driver = driver_client
+        self.wait_client(driver_client)
 
     def get_page(self, url: str):
         """ Переход по url
@@ -73,19 +77,32 @@ class BrowserHelpers():
     def click_button(self, button):
         button.click()
 
+    def wait_client(self, driver_client, timeout=5):
+        wait_client = WebDriverWait(driver_client, timeout)
+        return wait_client
+
+
     def get_personal_account_page(self, driver_client):
         self.get_page(url.main_page)
         lk_button = selector.lk_button
         driver_client.find_element(By.XPATH, lk_button).click()
-        current_url = self.get_current_page()
-        return current_url
+        self.wait_client(driver_client).until(expected_conditions.url_to_be(url.authorization_page))
+        try:
+            page_status = self.wait_client(driver_client).until(expected_conditions.url_to_be(url.authorization_page))
+        except TimeoutException:
+            page_status = False
+        return page_status
 
     def get_registration_page(self, driver_client):
         driver_client.get(url.authorization_page)
         registration_button = selector.registration_button
         driver_client.find_element(By.XPATH, registration_button).click()
-        current_url = self.get_current_page()
-        return current_url
+        self.wait_client(driver_client).until(expected_conditions.url_to_be(url.registry_page))
+        try:
+            page_status = self.wait_client(driver_client).until(expected_conditions.url_to_be(url.registry_page))
+        except TimeoutException:
+            page_status = False
+        return page_status
 
     def registration(
             self, driver_client, reg_login,
@@ -104,40 +121,27 @@ class BrowserHelpers():
         login_field.send_keys(reg_login)
         password_field.send_keys(reg_password)
         driver_client.find_element(By.XPATH, registry_button).click()
-        wait = WebDriverWait(driver_client, 10)
+        if len(reg_password) < 6:
+            error_element = driver_client.find_element(By.CLASS_NAME, "input__error")
+            assert error_element
         try:
-            reg_status = wait.until(expected_conditions.url_to_be(url.authorization_page))
+            reg_status = self.wait_client(driver_client).until(expected_conditions.url_to_be(url.authorization_page))
         except TimeoutException:
             reg_status = False
         return reg_status, reg_email, reg_password
 
+    def authorization(self, driver_client, email, password):
+        driver_client.get(url.authorization_page)
+        email_field = selector.email_button
+        password_field = selector.password_button
+        enter_button = selector.enter_button
+        driver_client.find_element(By.XPATH, email_field).send_keys(email)
+        driver_client.find_element(By.XPATH, password_field).send_keys(password)
+        driver_client.find_element(By.XPATH, enter_button).click()
+        try:
+            auth_status = self.wait_client(driver_client).until(expected_conditions.url_to_be(url.main_page))
+        except TimeoutException:
+            auth_status = False
+        return auth_status
 
-    # def clear_input_field(self, locator_path: str) -> None:
-    #     """ Очищает input поле ввода
-    #     """
-    #     while len(self.driver.xpath(locator_path).attr('value')) != 0:
-    #         self.driver.xpath(locator_path).send_keys(Keys.CONTROL + "a")
-    #         self.driver.xpath(locator_path).send_keys(Keys.DELETE)
-    #
-    # def send_keys(self, locator_path: str, value: str):
-    #     """ Очищает поле ввода и вводит в него переданное значение
-    #     """
-    #     self.clear_input_field(locator_path)
-    #     self.driver.xpath(locator_path).send_keys(value)
 
-# # class FixturesForUI(pytest, selector):
-# #     @classmethod
-# #     def browser(self):
-# #         driver = webdriver.Chrome()
-# #         yield driver
-# #         driver.quit()
-# #
-# #     def personal_account_page():
-# #         cls.browser.get(WEBSITE)
-# #         lk_button = browser.find_element(By.XPATH, selector.get('lk_button'))
-# #         lk_button.click()
-# #
-# #     @staticmethod
-# #     def get_current_url(browser):
-# #         current_url = browser.current_url
-# #         return current_url
