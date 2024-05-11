@@ -1,6 +1,5 @@
 import random
 from dataclasses import dataclass
-from faker import Faker
 
 @dataclass
 class Urls:
@@ -15,20 +14,20 @@ class Urls:
 @dataclass
 class Selectors:
     lk_button = "//a[.='Личный Кабинет']" #Личный кабинет
-    registration_button = '//a[@href="/register"]'
-    email_button = './/label[text() = "Email"]/../input'
-    password_button = './/label[text() = "Пароль"]/../input'
-    name_button = './/label[text() = "Имя"]/../input'
-    registry_button = '//button[.="Зарегистрироваться"]'
-    enter_button = '//main//button'
-    account_button = '//button[.="Войти в аккаунт"]'
-    logout_button = '//button[.="Выход"]'
-    forgot_password_auth_button = '//a[@href="/login"]'
-    constructor = ('//p[.="Конструктор"]')
-    sauces = '//div[.="Соусы"]'
-    buns = '//div[.="Булки"]'
-    ingredients = '//div[.="Начинки"]'
-    logo_button = "//div[@class='AppHeader_header__logo__2D0X2']/a[@href='/']"
+    registration_button = '//a[@href="/register"]' #Регистрация
+    email_button = './/label[text() = "Email"]/../input' #Поле ввода email
+    password_button = './/label[text() = "Пароль"]/../input' #Поле ввода пароля
+    name_button = './/label[text() = "Имя"]/../input' #Поле ввода логина
+    registry_button = '//button[.="Зарегистрироваться"]' #Кнопка Зарегистрироваться
+    enter_button = '//main//button' #Кнопка Войти
+    account_button = '//button[.="Войти в аккаунт"]' #Кнопка Войти в аккаунт
+    logout_button = '//button[.="Выход"]' #Кнопка Выход
+    forgot_password_auth_button = '//a[@href="/login"]' #Кнопка восстановления пароля
+    constructor = ('//p[.="Конструктор"]') #Конструктор
+    sauces = '//div[.="Соусы"]' #Раздел соусов
+    buns = '//div[.="Булки"]' #Раздел булок
+    ingredients = '//div[.="Начинки"]' #Раздел начинок
+    logo_button = "//div[@class='AppHeader_header__logo__2D0X2']/a[@href='/']" #Логотип
 
 
 

@@ -7,11 +7,6 @@ from data import Urls as url
 from data import Credetionals as cred
 
 
-
-WEBSITE = 'https://stellarburgers.nomoreparties.site/'
-
-
-
 @pytest.mark.usefixtures('driver_client', 'delete_all_cookies')
 class TestRegistration:
 
@@ -38,10 +33,10 @@ class TestRegistration:
         )
         assert not registry_status
 
-    def test_logout(self,browser_helper, driver_incognito):
+    def test_logout(self, browser_helper, driver_incognito):
         email = cred().unique_email()
         registry_status, email, password = browser_helper.registration(
-        driver_incognito, cred.login, email, cred.password)
+            driver_incognito, cred.login, email, cred.password)
         browser_helper.authorization(driver_incognito, email, cred.password)
         logout_status = browser_helper.logout(driver_incognito)
         assert logout_status
@@ -56,8 +51,9 @@ class TestRegistration:
             auth_status = browser_helper.authorization(driver_incognito, email, password, from_page=from_page)
             assert auth_status
 
+
 @pytest.mark.usefixtures('driver_client', 'delete_all_cookies', 'authorize')
-class TestConstructor():
+class TestConstructor:
 
     def test_move_to_constructor_from_lk(self, driver_client, browser_helper):
         browser_helper.get_profile_page(driver_client)
@@ -80,5 +76,3 @@ class TestConstructor():
             button.click()
             current_class = driver_client.find_element(By.XPATH, category).get_attribute('class')
             assert 'type_current' in current_class
-
-

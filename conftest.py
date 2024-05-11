@@ -34,6 +34,8 @@ def driver_client(request):
 
 @pytest.fixture
 def driver_incognito(request):
+    """Создание инкогнито вебдрайвер-клиента
+    """
     browser_name = request.config.getoption("--browser")
     if browser_name == "chrome":
         chrome_options = webdriver.ChromeOptions()
@@ -53,6 +55,8 @@ def driver_incognito(request):
 
 @pytest.fixture(scope='class')
 def authorize(driver_client):
+    """ Фикстура авторизации
+    """
     browser_helper = BrowserHelpers(driver_client)
     email = cred().unique_email()
     registry_status, email, password = browser_helper.registration(
@@ -62,6 +66,8 @@ def authorize(driver_client):
 
 @pytest.fixture(scope='class')
 def delete_all_cookies(driver_client):
+    """ Фикстура очистки куков
+    """
     driver_client.delete_all_cookies()
 
 
