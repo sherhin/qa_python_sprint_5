@@ -2,7 +2,7 @@
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
-from conftest import driver_client
+from tests.conftest import driver_client
 from data import Credetionals
 from data import Urls as url
 from locators import Locators as locator

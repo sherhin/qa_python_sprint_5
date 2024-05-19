@@ -1,4 +1,4 @@
-from conftest import driver_client
+from tests.conftest import driver_client
 
 from locators import Locators as locator
 from data import Urls as url
