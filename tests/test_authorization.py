@@ -34,7 +34,6 @@ class TestAuthorization:
         assert reg_status
         return email, password
 
-
     def test_authorization_from_main_page(self, driver_client):
         email, password = self.prepare_test_data(driver_client)
         driver_client.get(url.main_page)
@@ -44,10 +43,7 @@ class TestAuthorization:
         driver_client.find_element(*locator.password_field).send_keys(password)
         button_to_click = WebDriverWait(driver_client, 5).until(EC.presence_of_element_located(locator.enter_button))
         button_to_click.click()
-        try:
-            auth_status = WebDriverWait(driver_client, 10).until(EC.url_to_be(url.main_page))
-        except TimeoutException:
-            auth_status = False
+        auth_status = WebDriverWait(driver_client, 10).until(EC.url_to_be(url.main_page))
         assert auth_status
 
     def test_authorization_from_authorization_page(self, driver_client):
@@ -57,10 +53,7 @@ class TestAuthorization:
         driver_client.find_element(*locator.password_field).send_keys(password)
         button_to_click = WebDriverWait(driver_client, 5).until(EC.presence_of_element_located(locator.enter_button))
         button_to_click.click()
-        try:
-            auth_status = WebDriverWait(driver_client, 10).until(EC.url_to_be(url.main_page))
-        except TimeoutException:
-            auth_status = False
+        auth_status = WebDriverWait(driver_client, 10).until(EC.url_to_be(url.main_page))
         assert auth_status
 
     def test_authorization_from_forgot_password_page(self, driver_client):
@@ -71,8 +64,5 @@ class TestAuthorization:
         driver_client.find_element(*locator.password_field).send_keys(password)
         button_to_click = WebDriverWait(driver_client, 5).until(EC.presence_of_element_located(locator.enter_button))
         button_to_click.click()
-        try:
-            auth_status = WebDriverWait(driver_client, 10).until(EC.url_to_be(url.main_page))
-        except TimeoutException:
-            auth_status = False
+        auth_status = WebDriverWait(driver_client, 10).until(EC.url_to_be(url.main_page))
         assert auth_status

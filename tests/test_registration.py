@@ -1,4 +1,3 @@
-from selenium.common import TimeoutException
 
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -24,11 +23,7 @@ class TestRegistration:
         login_field.send_keys(login)
         password_field.send_keys(password)
         driver_client.find_element(*locator.registry_button).click()
-        try:
-            reg_status = WebDriverWait(
-                driver_client, 5).until(EC.url_to_be(url.authorization_page))
-        except TimeoutException:
-            reg_status = False
+        reg_status = WebDriverWait(driver_client, 5).until(EC.url_to_be(url.authorization_page))
         assert reg_status
 
     def test_registration_incorrect_password(self, driver_client):

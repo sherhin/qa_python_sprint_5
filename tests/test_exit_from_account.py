@@ -47,8 +47,5 @@ class TestExitFromAccount:
         driver_client.find_element(*locator.lk_button).click()
         WebDriverWait(driver_client, 5).until(EC.url_to_be(url.profile_page))
         driver_client.find_element(*locator.logout_button).click()
-        try:
-            page_status = WebDriverWait(driver_client, 5).until(EC.url_to_be(url.authorization_page))
-        except TimeoutException:
-            page_status = False
-        return page_status
+        page_status = WebDriverWait(driver_client, 5).until(EC.url_to_be(url.authorization_page))
+        assert page_status

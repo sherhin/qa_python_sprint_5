@@ -14,19 +14,10 @@ class Credetionals:
     def __init__(self):
         self.login = 'tevmenova'
         self.password = '123456'
-        self.email = self.email()
+        self.email = self.unique_email(login=self.login)
 
     @staticmethod
     def unique_email(login):
-        email = f'{login}8{random.randint(1000, 9999)}@yandex.ru'
+        email = f'{login}8{random.randint(10000, 99999)}@yandex.ru'
         return email
 
-    def login(self):
-        return self.login
-
-    def password(self):
-        return self.password
-
-    def email(self):
-        email = self.unique_email(self.login)
-        return email
