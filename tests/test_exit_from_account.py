@@ -1,19 +1,17 @@
-import pytest
-
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
-from tests.conftest import driver_client
 from data import Urls as url
 from locators import Locators as locator
 
-@pytest.mark.usefixtures('prepare_test_data')
+
 class TestExitFromAccount:
 
-    def test_exit_from_account(self, driver_client):
+    def test_exit_from_account(self, driver_client, prepare_test_data):
+        email, password = prepare_test_data
         driver_client.get(url.authorization_page)
-        driver_client.find_element(*locator.email_field).send_keys(self.email)
-        driver_client.find_element(*locator.password_field).send_keys(self.password)
+        driver_client.find_element(*locator.email_field).send_keys(email)
+        driver_client.find_element(*locator.password_field).send_keys(password)
         button = WebDriverWait(driver_client, 5).until(EC.presence_of_element_located(locator.enter_button))
         button.click()
         driver_client.find_element(*locator.lk_button).click()
